@@ -31,9 +31,9 @@
 
         // مرحله 2: وقتی پرداخت تایید شد، NFT را ارسال کن
         async function mintNFT() {
-            const paymentUrl = 'https://your-project.glitch.me/webhook';  // URL سرور آنلاین شما که در مرحله قبل ساختید
+            const paymentUrl = 'https://your-vercel-project-url.vercel.app/api/webhook';  // URL سرور شما که در Vercel ساخته‌اید
 
-            // درخواست برای پرداخت
+            // ارسال درخواست به سرور
             const response = await fetch(paymentUrl, {
                 method: 'POST',
                 headers: {
