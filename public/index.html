@@ -29,7 +29,7 @@
         }
 
         async function mintNFT() {
-            const paymentUrl = 'https://your-vercel-project-url.vercel.app/api/webhook';  // URL سرور شما که در Vercel ساخته‌اید
+            const paymentUrl = 'https://your-vercel-project-url.vercel.app/api/webhook';  // آدرس سرور شما در Vercel
 
             const response = await fetch(paymentUrl, {
                 method: 'POST',
@@ -38,7 +38,7 @@
                 },
                 body: JSON.stringify({
                     address: userAddress,  
-                    tokenId: 123,  
+                    tokenId: 123,  // شناسه NFT که می‌خواهید ارسال کنید
                 }),
             });
 
