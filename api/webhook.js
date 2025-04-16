@@ -2,10 +2,10 @@
 const axios = require("axios");
 const { ethers } = require("ethers");
 
-const COINBASE_API_KEY = "YOUR_COINBASE_API_KEY";  // کلید API شما از Coinbase Commerce
-const provider = new ethers.providers.JsonRpcProvider("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID");
-const wallet = new ethers.Wallet("YOUR_PRIVATE_KEY", provider); // کلید خصوصی کیف پول شما
-const contractAddress = "YOUR_CONTRACT_ADDRESS"; // آدرس قرارداد شما
+const COINBASE_API_KEY = "38daf6dd-eb2f-4477-ac2e-7ae8b6649ee1";  // کلید API شما از Coinbase Commerce
+const provider = new ethers.providers.JsonRpcProvider("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID");  // به‌جای YOUR_INFURA_PROJECT_ID، Project ID خودتون رو وارد کنید
+const wallet = new ethers.Wallet("319439715b295213a9a689eb373d3e45ff272e63355ddbada84dc74284dedcb5", provider); // کلید خصوصی کیف پول شما
+const contractAddress = "YOUR_CONTRACT_ADDRESS"; // آدرس قرارداد ERC721 NFT شما
 const contractABI = [
   {
     "constant": false,
@@ -21,7 +21,7 @@ const contractABI = [
 
 const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
-// بررسی وضعیت پرداخت
+// بررسی وضعیت پرداخت از Coinbase
 async function checkPayment(paymentId) {
   try {
     const response = await axios.get(`https://api.commerce.coinbase.com/charges/${paymentId}`, {
@@ -55,15 +55,15 @@ async function sendNFT(userAddress, tokenId) {
   }
 }
 
-// دریافت وب‌هوک و پردازش آن
+// پردازش درخواست Webhook از Coinbase
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const paymentId = req.body.data.id;
     const paymentConfirmed = await checkPayment(paymentId);
 
     if (paymentConfirmed) {
-      const userAddress = req.body.data.metadata.custom;
-      const tokenId = req.body.data.metadata.tokenId;
+      const userAddress = req.body.data.metadata.custom;  // آدرس کیف پول کاربر که هنگام پرداخت ارسال کرده
+      const tokenId = req.body.data.metadata.tokenId; // شناسه NFT که قرار است ارسال شود
       await sendNFT(userAddress, tokenId);
       return res.status(200).send({ status: 'success' });
     } else {
